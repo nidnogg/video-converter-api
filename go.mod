@@ -2,10 +2,14 @@ module github.com/nidnogg/video-converter-api
 
 go 1.21
 
-require github.com/gofiber/fiber/v2 v2.50.0
+require (
+	github.com/gofiber/fiber/v2 v2.50.0
+	github.com/qinains/fastergoding v0.0.2
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

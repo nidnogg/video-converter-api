@@ -1,0 +1,110 @@
+<style>
+  body {
+    background-color: #333;
+    /* Dark background color */
+    color: #fff;
+    /* Text color */
+    font-family: Arial, sans-serif;
+  }
+
+  form {
+    background-color: #444;
+    /* Form background color */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    /* Box shadow for a modern look */
+  }
+
+  input[type="file"] {
+    background-color: #555;
+    /* File input background color */
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+
+  input[type="file"]:hover {
+    background-color: #666;
+    /* Hover effect for the file input */
+  }
+
+  input[type="submit"] {
+    background-color: #007bff;
+    /* Submit button color */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #0056b3;
+    /* Hover effect for the submit button */
+  }
+</style>
+
+<!DOCTYPE html>
+<html>
+
+<body>
+  <!-- <form action="http://localhost:3000/upload" method="post" enctype="multipart/form-data"> -->
+  <form action="" id="upload-form" method="post" enctype="multipart/form-data">
+    <input id="file-input" type="file" name="files">
+    <input type="submit" value="Upload">
+  </form>
+  <script>
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('file-input');
+  
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log(e.target.value);
+      const files = fileInput.files;
+      console.log("files", files);
+  
+      if (files.length === 0) {
+        alert('Please select a file to upload.');
+        return;
+      }
+  
+      const formData = new FormData();
+  
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        formData.append('files', file);
+  
+        const chunkSize = 1024 * 1024; // 1 MB chunks (you can adjust the chunk size)
+  
+        let start = 0;
+  
+        while (start < file.size) {
+          const chunk = file.slice(start, start + chunkSize);
+          formData.append('chunk', chunk);
+          start += chunkSize;
+        }
+  
+        // Make an HTTP POST request for each file chunk
+        const response = await fetch('http://localhost:3000/upload', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (response.ok) {
+          console.log(`Chunk uploaded successfully`);
+        } else {
+          console.error(`Error uploading chunk: ${response.statusText}`);
+        }
+      }
+  
+      alert('File(s) uploaded successfully');
+    });
+  </script>
+</body>
+
+</html>
